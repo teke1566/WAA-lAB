@@ -1,10 +1,13 @@
 package miu.edu.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
+@Table(name = "users")
+@Data
 public class User {
 
     @Id
@@ -17,11 +20,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Post> posts;
 
-    public User(Long id, String name, List<Post> posts) {
-        this.id = id;
-        this.name = name;
-        this.posts = posts;
-    }
+
 
     public User() {
 
