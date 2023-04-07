@@ -19,14 +19,17 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    @Autowired
+    public List<User> getUsersWithMoreThanOnePost() {
+        return userRepository.findByPostsSizeGreaterThan(1);
+    }
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
         return user.get();
