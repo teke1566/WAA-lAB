@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,12 +20,10 @@ public class User {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
-    @Fetch(FetchMode.SELECT)
-    @JoinColumn(name = "user_id")
-    private List<Post> posts;
 
+    private List<Post> posts;
 
 
     public User() {

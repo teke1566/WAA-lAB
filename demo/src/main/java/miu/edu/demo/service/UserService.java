@@ -43,4 +43,14 @@ public class UserService {
         User user = getUserById(id);
         return user.getPosts();
     }
+        public List<User> getUsersWithMoreThanNPosts(int n) {
+            return userRepository.findByPostsSizeGreaterThan(n);
+        }
+
+        public void deleteUserById(Long id) {
+            userRepository.deleteById(id);
+        }
+
+
+
 }

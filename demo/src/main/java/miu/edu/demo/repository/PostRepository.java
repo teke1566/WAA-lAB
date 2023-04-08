@@ -15,4 +15,5 @@ public interface PostRepository {
     void deleteById(Long id);
 
     List<Post> findByAuthor(String author);
+    List<Post> findByTitle(String title);
 }

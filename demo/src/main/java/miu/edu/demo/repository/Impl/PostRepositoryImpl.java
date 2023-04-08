@@ -47,4 +47,11 @@ public class PostRepositoryImpl implements PostRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Post> findByTitle(String title) {
+        return database.stream()
+                .filter(post -> Objects.equals(post.getTitle(), title))
+                .collect(Collectors.toList());
+    }
+
 }
