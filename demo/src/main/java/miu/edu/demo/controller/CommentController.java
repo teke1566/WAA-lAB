@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import miu.edu.demo.aspects.annotation.ExecutionTime;
+import miu.edu.demo.aspects.annotation.LoggerInfo;
 
 import java.util.List;
 
@@ -15,12 +17,16 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     @Autowired
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
     @GetMapping("/{id}")
+    @LoggerInfo
+    @ExecutionTime
+
     public ResponseEntity<Comment> getCommentById(@PathVariable Long id) {
         Comment comment = commentService.getCommentById(id);
         if (comment != null) {
@@ -31,12 +37,16 @@ public class CommentController {
     }
 
     @PostMapping
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
         Comment createdComment = commentService.createComment(comment);
         return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
         Comment updatedComment = commentService.updateComment(id, comment);
         if (updatedComment != null) {
@@ -47,6 +57,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
+
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         boolean result = commentService.deleteComment(id);
         if (result) {
@@ -57,6 +70,8 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
         if (!comments.isEmpty()) {

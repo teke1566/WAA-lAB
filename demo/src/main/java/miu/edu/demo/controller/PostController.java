@@ -1,5 +1,7 @@
 package miu.edu.demo.controller;
 
+import miu.edu.demo.aspects.annotation.ExecutionTime;
+import miu.edu.demo.aspects.annotation.LoggerInfo;
 import miu.edu.demo.domain.Post;
 import miu.edu.demo.dto.PostDto;
 import miu.edu.demo.repository.PostRepository;
@@ -18,6 +20,7 @@ public class PostController {
 
     private final PostService postService;
     private final ModelMapper modelMapper;
+
     private PostRepository postRepository;
 
     @Autowired
@@ -27,6 +30,8 @@ public class PostController {
     }
 
     @GetMapping("/")
+    @LoggerInfo
+    @ExecutionTime
     public List<PostDto> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
         return posts.stream()
@@ -35,12 +40,16 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
+    @LoggerInfo
+    @ExecutionTime
     public PostDto getPostById(@PathVariable Long id) {
         Post post = postService.getPostById(id);
         return convertToDto(post);
     }
 
     @PostMapping("/")
+    @LoggerInfo
+    @ExecutionTime
     public PostDto savePost(@RequestBody PostDto postDto) {
         Post post = convertToEntity(postDto);
         Post savedPost = postService.savePost(post);
@@ -48,6 +57,8 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @RequestBody PostDto postDto) {
         Post postToUpdate = postService.getPostById(id);
         if (postToUpdate == null) {
@@ -62,6 +73,8 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
+    @LoggerInfo
+    @ExecutionTime
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         Post postToDelete = postService.getPostById(id);
         if (postToDelete == null) {
@@ -71,6 +84,8 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/posts")
+    @LoggerInfo
+    @ExecutionTime
     public List<Post> getPostsByAuthor(@RequestParam("author") String author) {
         return postRepository.findByAuthor(author);
     }
