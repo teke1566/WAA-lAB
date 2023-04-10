@@ -30,11 +30,11 @@ public class ExecutionTimeAspect {
         long finish = System.nanoTime();
         long exeTime = (finish - start);
 
-        System.out.println(proceedingJoinPoint.getSignature().toShortString() + " takes ns: " + exeTime );
+        System.out.println(proceedingJoinPoint.getSignature().toShortString() + " teke: " + exeTime );
 
         String operation =  proceedingJoinPoint.getSignature().toShortString();
 
-        String principle = "hi me";
+        String principle = "hi teke";
 
         Logger log = new Logger();
         log.setPrinciple(principle);

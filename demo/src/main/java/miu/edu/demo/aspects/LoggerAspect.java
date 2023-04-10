@@ -29,7 +29,7 @@ public class LoggerAspect {
     public void logOperation(JoinPoint joinPoint) {
         String operation =  joinPoint.getSignature().toShortString();
 
-        String principle = "hi me";
+        String principle = "hi teke";
 
         Logger log = new Logger();
         log.setPrinciple(principle);
