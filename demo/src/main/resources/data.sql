@@ -18,9 +18,13 @@ VALUES (2, 1);
 INSERT INTO users_roles (user_id, roles_id)
 VALUES (3, 2);
 
-INSERT INTO product (id, name, price, id_user)
-VALUES (1, 'iPhone', 1200, 1);
-INSERT INTO product (id, name, price, id_user)
-VALUES (2, 'iPad', 900, 1);
-INSERT INTO product (id, name, price, id_user)
-VALUES (3, 'Pen', 5, 1);
+
+--INSERT INTO posts (id, author, content, title)
+--VALUES (1, 'iPhone', "1200", "1");
+--INSERT INTO posts (id, author, content, title)
+--VALUES (2, 'iPhone', "1200", "1");
+--INSERT INTO posts (id, author, content, title)
+--VALUES (3, 'iPhone', "1200", "1");
+--INSERT INTO posts (id, title, content, author, user_id)
+--VALUES (1, 'JohnDoe', 'This is the content of the post.', 'Sample Post Title', 12345);
+--;

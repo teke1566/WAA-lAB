@@ -1,13 +1,13 @@
 package miu.edu.demo.dto.response;
 
-
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-public class LoginRequest {
-    private String email;
-    private String password;
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoginResponse {
+    private String accessToken;
+    private String refreshToken;
 }
-

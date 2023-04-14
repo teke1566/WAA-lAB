@@ -5,21 +5,27 @@ import miu.edu.demo.aspects.annotation.LoggerInfo;
 import miu.edu.demo.domain.Post;
 import miu.edu.demo.dto.PostDto;
 import miu.edu.demo.repository.PostRepository;
+import miu.edu.demo.service.Impl.AwesomeUserDetailsService;
 import miu.edu.demo.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
+    @Autowired
     private final PostService postService;
     private final ModelMapper modelMapper;
+    @Autowired
+    private AwesomeUserDetailsService userDetailsService;
 
     private PostRepository postRepository;
 
@@ -50,10 +56,18 @@ public class PostController {
     @PostMapping("/")
     @LoggerInfo
     @ExecutionTime
-    public PostDto savePost(@RequestBody PostDto postDto) {
-        Post post = convertToEntity(postDto);
-        Post savedPost = postService.savePost(post);
-        return convertToDto(savedPost);
+//    public PostDto savePost(@RequestBody PostDto postDto) {
+//        Post post = convertToEntity(postDto);
+//        Post savedPost = postService.savePost(post);
+//        return convertToDto(savedPost);
+//    }
+    @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+        // Extract user details from authenticated user
+        String username = userDetailsService.loadUserByUsername(post.getUser().getEmail()).getUsername();
+        post.getUser().setEmail(username);
+        Post createdPost = postService.savePost(post);
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
