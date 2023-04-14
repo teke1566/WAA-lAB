@@ -24,6 +24,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
+
     public Post(long id, String title, String content, String author) {
         this.id = id;
         this.title = title;
