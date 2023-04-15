@@ -1,54 +1,26 @@
 package miu.edu.demo.aspects;
 
-import miu.edu.demo.domain.Logger;
-import miu.edu.demo.repository.LoggerRepository;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import java.util.Date;
-
 
 @Aspect
 @Component
 public class ExecutionTimeAspect {
-    @Autowired
-    private LoggerRepository loggerRepo;
 
-    @Pointcut("@annotation(miu.edu.demo.aspects.annotation.ExecutionTime)")
-    public void ExecutionTime() {
+    private static final Logger logger = LoggerFactory.getLogger(ExecutionTimeAspect.class);
 
-    }
-
-    @Around("ExecutionTime()")
-    public Object calculateExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        long start = System.nanoTime();
-        var result = proceedingJoinPoint.proceed();
-        long finish = System.nanoTime();
-        long exeTime = (finish - start);
-
-        System.out.println(proceedingJoinPoint.getSignature().toShortString() + " teke: " + exeTime );
-
-        String operation =  proceedingJoinPoint.getSignature().toShortString();
-
-        String principle = "hi teke";
-
-        Logger log = new Logger();
-        log.setPrinciple(principle);
-        log.setOperation(operation);
-        log.setExecutionTime(String.valueOf(exeTime) + " ns");
-        log.setDate(new Date());
-
-        this.saveLogEntry(log);
-
+    @Around("@annotation(miu.edu.demo.aspects.annotation.ExecutionTime)")
+    public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long startTime = System.currentTimeMillis();
+        Object result = joinPoint.proceed();
+        long endTime = System.currentTimeMillis();
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getTarget().getClass().getSimpleName();
+        logger.info("Method {} in class {} took {} ms to execute", methodName, className, (endTime - startTime));
         return result;
     }
-
-    private void saveLogEntry(Logger log) {
-        loggerRepo.save(log);
-    }
-
 }

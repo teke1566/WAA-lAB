@@ -1,7 +1,10 @@
 package miu.edu.demo.domain;
+
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -19,4 +22,12 @@ public class Logger {
     private String operation;
     private Date date;
     private String executionTime;
+    public void setExecutionTime(String executionTime) {
+        this.executionTime = executionTime;
+    }
+    public void setDate(LocalDate date) {
+        // Convert LocalDate to Date
+        Date convertedDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        this.date = convertedDate;
+    }
 }

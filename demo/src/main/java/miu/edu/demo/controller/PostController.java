@@ -6,6 +6,7 @@ import miu.edu.demo.domain.Post;
 import miu.edu.demo.dto.PostDto;
 import miu.edu.demo.repository.PostRepository;
 import miu.edu.demo.service.Impl.AwesomeUserDetailsService;
+import miu.edu.demo.service.LoggerService;
 import miu.edu.demo.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,8 @@ public class PostController {
     private final ModelMapper modelMapper;
     @Autowired
     private AwesomeUserDetailsService userDetailsService;
-
+    @Autowired
+    private LoggerService loggerService;
     private PostRepository postRepository;
 
     @Autowired
@@ -35,10 +38,21 @@ public class PostController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/")
-    @LoggerInfo
-    @ExecutionTime
+//    @GetMapping
+//    @LoggerInfo
+//    @ExecutionTime
+//    public List<PostDto> getAllPosts() {
+//        List<Post> posts = postService.getAllPosts();
+//        return posts.stream()
+//                .map(this::convertToDto)
+//                .collect(Collectors.toList());
+//    }
+    @GetMapping
     public List<PostDto> getAllPosts() {
+        // Logging logic
+        loggerService.logInfo("Getting all posts");
+        loggerService.logExecutionTime("GET", "PostController.getAllPosts", LocalTime.now());
+
         List<Post> posts = postService.getAllPosts();
         return posts.stream()
                 .map(this::convertToDto)
@@ -53,7 +67,7 @@ public class PostController {
         return convertToDto(post);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @LoggerInfo
     @ExecutionTime
 //    public PostDto savePost(@RequestBody PostDto postDto) {
@@ -97,7 +111,7 @@ public class PostController {
         postService.deletePostById(id);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/posts")
+    @GetMapping("/author")
     @LoggerInfo
     @ExecutionTime
     public List<Post> getPostsByAuthor(@RequestParam("author") String author) {

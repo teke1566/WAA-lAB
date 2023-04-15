@@ -25,6 +25,6 @@ VALUES (3, 2);
 --VALUES (2, 'iPhone', "1200", "1");
 --INSERT INTO posts (id, author, content, title)
 --VALUES (3, 'iPhone', "1200", "1");
---INSERT INTO posts (id, title, content, author, user_id)
---VALUES (1, 'JohnDoe', 'This is the content of the post.', 'Sample Post Title', 12345);
---;
+INSERT INTO posts (id, author, content, title, user_id)
+VALUES (1, 'JohnDoe', 'This is the content of the post.',
+'Sample Post Title', 1);

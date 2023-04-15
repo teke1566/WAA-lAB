@@ -1,9 +1,12 @@
 package miu.edu.demo.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -13,9 +16,24 @@ import java.util.Date;
 public class ExceptionLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String principle;
-    String operation;
-    String exceptionType;
-    Date date;
+    @Column(name = "transaction_id")
+    private Long transactionId;
+
+    @Column(name = "date")
+    private LocalDate date;
+
+    @Column(name = "time")
+    private LocalTime time;
+
+    @Column(name = "principle")
+    private String principle;
+
+    @Column(name = "operation")
+    private String operation;
+
+    @Column(name = "exception_type")
+    private String exceptionType;
+
+    // Constructors, getters and setters
+
 }

@@ -2,38 +2,40 @@ package miu.edu.demo.aspects;
 
 import miu.edu.demo.domain.ExceptionLog;
 import miu.edu.demo.repository.ExceptionLogRepository;
-
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-@Component
 @Aspect
+@Component
 public class ExceptionLogAspect {
-    @Autowired
-    ExceptionLogRepository exceptionRepo;
-    @Pointcut("execution(* miu.edu.demo.*.*(..)) && " +
-            "!execution(* miu.edu.demo.repository.ExceptionLogRepository.*(..)) &&" +
-            "!execution(* miu.edu.demo.aspects.ExceptionLogAspect.*(..))")
-    private void logException() {}
 
-    @AfterThrowing(pointcut="logException()", throwing = "ex")
-    public void logExceptionDetails(Throwable ex) {
-        saveLog(ex);
+    @Autowired
+    private ExceptionLogRepository exceptionRepository;
+
+    @Pointcut("@annotation(miu.edu.demo.aspects.annotation.LoggerInfo)")
+    public void exceptionLogPointcut() {
+
     }
 
-    private void saveLog(Throwable ex){
-        var exception = new ExceptionLog();
+    @AfterThrowing(pointcut = "exceptionLogPointcut()", throwing = "e")
+    public void logException(JoinPoint joinPoint, Throwable e) {
+        String operation = joinPoint.getSignature().toShortString();
+        String principle = "fake_user"; // Replace with actual logic to get the user principle
 
-        exception.setPrinciple("teke");
-        exception.setOperation(ex.getMessage());
-        exception.setExceptionType(ex.getStackTrace()[0].getClassName());
-        exception.setDate(new Date());
+        ExceptionLog exceptionEntity = new ExceptionLog();
+        exceptionEntity.setDate(LocalDate.now());
+        exceptionEntity.setTime(LocalTime.now());
+        exceptionEntity.setPrinciple(principle);
+        exceptionEntity.setOperation(operation);
+        exceptionEntity.setExceptionType(e.getClass().getSimpleName());
 
-        exceptionRepo.save(exception);
+        exceptionRepository.save(exceptionEntity); // Assuming you have implemented save() method in the repository for ExceptionEntity
     }
 }

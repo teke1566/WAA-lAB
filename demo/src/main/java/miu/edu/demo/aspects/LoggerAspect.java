@@ -1,45 +1,35 @@
 package miu.edu.demo.aspects;
 
-import miu.edu.demo.domain.Logger;
-import miu.edu.demo.repository.LoggerRepository;
-
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Aspect
 @Component
 public class LoggerAspect {
 
-    @Autowired
-    private LoggerRepository loggerRepo;
-
+    private static final Logger logger = LoggerFactory.getLogger(LoggerAspect.class);
 
     @Pointcut("@annotation(miu.edu.demo.aspects.annotation.LoggerInfo)")
-    public void LogInfo(){}
-
-    @Before("LogInfo()")
-    public void logBefore(JoinPoint joinPoint) {
-        logOperation(joinPoint);
+    public void loggerInfoAnnotation() {
     }
 
-    public void logOperation(JoinPoint joinPoint) {
-        String operation =  joinPoint.getSignature().toShortString();
-
-        String principle = "hi teke";
-
-        Logger log = new Logger();
-        log.setPrinciple(principle);
-        log.setOperation(operation);
-        log.setDate(new Date());
-
-        this.saveLogEntry(log);
+    @Before("loggerInfoAnnotation()")
+    public void logMethodInvocation(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getTarget().getClass().getSimpleName();
+        logger.info("Method {} invoked in class {}", methodName, className);
     }
 
-    private void saveLogEntry(Logger log) {
-        loggerRepo.save(log);
+    @AfterReturning(pointcut = "loggerInfoAnnotation()", returning = "result")
+    public void logMethodReturn(JoinPoint joinPoint, Object result) {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getTarget().getClass().getSimpleName();
+        logger.info("Method {} in class {} returned {}", methodName, className, result);
     }
 }
