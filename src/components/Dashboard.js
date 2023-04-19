@@ -3,9 +3,9 @@ import Posts from './Posts';
 import './index.css';
 const Dashboard = () => {
   const [posts, setPosts] = useState([
-    { id: 111, title: 'Happiness', author: 'John',  content: 'This is the content in the post...' },
+    { id: 111, title: 'Happiness', author: 'John', content: 'This is the content in the post...' },
     { id: 112, title: 'MIU', author: 'Dean', content: 'This is the content in the post...' },
-    { id: 113, title: 'Enjoy Life', author: 'Jasmine',  content: 'This is the content in the post...' }
+    { id: 113, title: 'Enjoy Life', author: 'Jasmine', content: 'This is the content in the post...' }
   ]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [updatedTitle, setUpdatedTitle] = useState('');
@@ -13,16 +13,17 @@ const Dashboard = () => {
   const PostClick = (post) => {
     setSelectedPost(post);
   }
-
   const UpdateTitle = () => {
     const updatedPosts = posts.map(post => {
       if (post.id === selectedPost.id) {
-        return { post, title: updatedTitle };
+        return { ...post, title: updatedTitle };
       }
       return post;
     });
     setPosts(updatedPosts);
+    setSelectedPost({...selectedPost, title: updatedTitle});
   }
+  
 
   const EditButton = () => {
     console.log('Edit Button for post:', selectedPost);
@@ -38,13 +39,11 @@ const Dashboard = () => {
   return (
     <div className="container">
       <h1>Dashboard</h1>
-      <Posts posts={posts} onPostClick={PostClick} />
+      <Posts posts={posts} onPostClick={PostClick} updatedTitle={updatedTitle} />
       {selectedPost && (
         <div className="post-details">
           <h2>Post Details</h2>
-         
           <h3><u>{selectedPost.title}</u></h3>
-
           <p>Author: {selectedPost.author}</p>
           <p>Content: {selectedPost.content}</p>
           <button onClick={EditButton}>Edit</button>
