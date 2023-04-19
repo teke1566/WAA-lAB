@@ -1,9 +1,9 @@
 spring:
   application:
-    name: postgres
+    name: post
   datasource:
     password: admin
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/post
     username: postgres
   jpa:
     hibernate:
